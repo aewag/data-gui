@@ -44,10 +44,8 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QHeaderView,
 )
-from datastub.export import *
-from datastub.DataFS import *
-from datastub.IpInfoShort import *
-from datastub.IpInfoShort import IP_INFO_FILE
+from datastub.export import loadpickle, storepickle
+from datastub.IpInfoShort import IP_INFO_FILE, IpInfoShort
 from datastub.leaks import (
     Library,
     FunctionLeak,
