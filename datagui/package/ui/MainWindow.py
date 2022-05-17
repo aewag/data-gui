@@ -21,6 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 import sys
 import datetime
 import fs
+import os
 
 from PyQt5.Qsci import QsciScintilla
 from PyQt5.QtCore import Qt, QVariant, QModelIndex, QItemSelectionModel
