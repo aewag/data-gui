@@ -119,22 +119,24 @@ class SummaryTab(QWidget):
         if self.leak.status is not None:
             if self.leak.status.nsperformed:
                 # Only show the highest value for generic leaks
-                l = max(self.leak.status.nsleak, key=lambda l: l.normalized())
+                nsl = max(self.leak.status.nsleak, key=lambda l: l.normalized())
                 lbl_circle = QLabel()
-                lbl_circle.setPixmap(getCircle(getColor(l.normalized(), l.threshold())))
+                lbl_circle.setPixmap(
+                    getCircle(getColor(nsl.normalized(), nsl.threshold()))
+                )
                 lbl_circle.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-                lbl_text = QLabel("%s: %0.1f%%" % ("generic", l.normalized() * 100.0))
+                lbl_text = QLabel("%s: %0.1f%%" % ("generic", nsl.normalized() * 100.0))
                 statistic_grid.addWidget(lbl_circle, rowid, 0)
                 statistic_grid.addWidget(lbl_text, rowid, 1)
                 rowid += 1
             if len(self.leak.status.spperformed) > 0:
                 # Filter leaks: only keep the highest value
                 spleaks = dict()
-                for l in self.leak.status.spleak:
-                    key = (l.target, l.property)
-                    if key in spleaks and spleaks[key].normalized() >= l.normalized():
+                for spl in self.leak.status.spleak:
+                    key = (spl.target, spl.property)
+                    if key in spleaks and spleaks[key].normalized() >= spl.normalized():
                         continue
-                    spleaks[key] = l
+                    spleaks[key] = spl
 
                 for key, l in sorted(spleaks.items()):
                     lbl_circle = QLabel()
