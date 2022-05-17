@@ -21,35 +21,44 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 import setuptools
 from datagui import DATAGUI_VERSION
 
+
 def readme():
-    with open('README.md') as f:
+    with open("README.md") as f:
         return f.read()
 
+
 setuptools.setup(
-      name='datagui',
-      version=DATAGUI_VERSION,
-      description='Graphical user interface for the DATA tool',
-      long_description=readme(),
-      url='https://github.com/IAIK/DATA-GUI',
-      author='IAIK, Graz University of Technology',
-      author_email='data@iaik.tugraz.at',
-      license='GPLv3+',
-      classifiers=[
-        'Programming Language :: Python :: 3.5',
-        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
-      ],
-      keywords='data gui memory side-channel analysis',
-      packages=['datagui', 'datagui/package', 'datagui/package/ui', 'datagui/package/model', 'datastub'],
-      install_requires=[
-          'qscintilla>=2.10.3, <3',
-          'qtconsole>=4.3.1',
-          'pgzero>=1.2',
-          'pyqt5>=5.10.1, <6',
-          'pyqtgraph>=0.10.0',
-          'pyserial>=3.4',
-          'fs>=2.1.0',
-          'sip>=4.19.8'
-      ],
-      scripts=['bin/datagui'],
-      include_package_data=True,
-      zip_safe=False)
+    name="datagui",
+    version=DATAGUI_VERSION,
+    description="Graphical user interface for the DATA tool",
+    long_description=readme(),
+    url="https://github.com/IAIK/DATA-GUI",
+    author="IAIK, Graz University of Technology",
+    author_email="data@iaik.tugraz.at",
+    license="GPLv3+",
+    classifiers=[
+        "Programming Language :: Python :: 3.5",
+        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    ],
+    keywords="data gui memory side-channel analysis",
+    packages=[
+        "datagui",
+        "datagui/package",
+        "datagui/package/ui",
+        "datagui/package/model",
+        "datastub",
+    ],
+    install_requires=[
+        "qscintilla>=2.10.3, <3",
+        "qtconsole>=4.3.1",
+        "pgzero>=1.2",
+        "pyqt5>=5.10.1, <6",
+        "pyqtgraph>=0.10.0",
+        "pyserial>=3.4",
+        "fs>=2.1.0",
+        "sip>=4.19.8",
+    ],
+    scripts=["bin/datagui"],
+    include_package_data=True,
+    zip_safe=False,
+)

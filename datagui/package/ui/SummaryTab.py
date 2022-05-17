@@ -19,27 +19,41 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 from PyQt5.QtCore import QSize
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QSizePolicy, QGroupBox, QGridLayout, QHBoxLayout, QButtonGroup, QTextEdit, QLabel
-from PyQt5.QtGui import QColor, QFont, QFontMetrics
-from datastub.leaks import Leak, NSLeak, NSPType, SPLeak
-from datagui.package.utils import getCircle, getColor, createIconButton, LeakMetaInfo, LeakFlags, debug
+from PyQt5.QtWidgets import (
+    QWidget,
+    QSizePolicy,
+    QGroupBox,
+    QGridLayout,
+    QHBoxLayout,
+    QButtonGroup,
+    QTextEdit,
+    QLabel,
+)
+from PyQt5.QtGui import QFontMetrics
+from datastub.leaks import Leak
+from datagui.package.utils import (
+    getCircle,
+    getColor,
+    createIconButton,
+    LeakMetaInfo,
+    LeakFlags,
+    debug,
+)
 
 btn_to_flag = {
     0: LeakFlags.NOLEAK,
     1: LeakFlags.INVESTIGATE,
     2: LeakFlags.LEAK,
-    3: LeakFlags.DONTCARE
+    3: LeakFlags.DONTCARE,
 }
 
 flag_to_btn = {
     LeakFlags.NOLEAK: 0,
     LeakFlags.INVESTIGATE: 1,
     LeakFlags.LEAK: 2,
-    LeakFlags.DONTCARE: 3
+    LeakFlags.DONTCARE: 3,
 }
 
-import pdb
 
 class SummaryTab(QWidget):
     def __init__(self, leak, updateFlagIcon, notifyUnsavedChanges):
@@ -65,11 +79,11 @@ class SummaryTab(QWidget):
 
         # # # # #
         flags_group_box = QGroupBox("Rating")
-        #icon_size = QSize(20, 20)
-        font_size = QFontMetrics(self.user_comment.currentFont()).size(0,"A").height()
+        # icon_size = QSize(20, 20)
+        font_size = QFontMetrics(self.user_comment.currentFont()).size(0, "A").height()
         font_size *= 1.1
         icon_size = QSize(font_size, font_size)
-        
+
         flag_0 = createIconButton(icon_size, LeakFlags.NOLEAK)
         flag_1 = createIconButton(icon_size, LeakFlags.INVESTIGATE)
         flag_2 = createIconButton(icon_size, LeakFlags.LEAK)
@@ -105,28 +119,35 @@ class SummaryTab(QWidget):
         if self.leak.status is not None:
             if self.leak.status.nsperformed:
                 # Only show the highest value for generic leaks
-                l = max(self.leak.status.nsleak, key=lambda l: l.normalized())
+                nsl = max(self.leak.status.nsleak, key=lambda l: l.normalized())
                 lbl_circle = QLabel()
-                lbl_circle.setPixmap(getCircle(getColor(l.normalized(), l.threshold())))
+                lbl_circle.setPixmap(
+                    getCircle(getColor(nsl.normalized(), nsl.threshold()))
+                )
                 lbl_circle.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-                lbl_text = QLabel("%s: %0.1f%%" % ("generic", l.normalized() * 100.0))
+                lbl_text = QLabel("%s: %0.1f%%" % ("generic", nsl.normalized() * 100.0))
                 statistic_grid.addWidget(lbl_circle, rowid, 0)
                 statistic_grid.addWidget(lbl_text, rowid, 1)
                 rowid += 1
             if len(self.leak.status.spperformed) > 0:
                 # Filter leaks: only keep the highest value
                 spleaks = dict()
-                for l in self.leak.status.spleak:
-                    key = (l.target, l.property)
-                    if key in spleaks and spleaks[key].normalized() >= l.normalized():
+                for spl in self.leak.status.spleak:
+                    key = (spl.target, spl.property)
+                    if key in spleaks and spleaks[key].normalized() >= spl.normalized():
                         continue
-                    spleaks[key] = l
+                    spleaks[key] = spl
 
                 for key, l in sorted(spleaks.items()):
                     lbl_circle = QLabel()
-                    lbl_circle.setPixmap(getCircle(getColor(l.normalized(), l.threshold())))
+                    lbl_circle.setPixmap(
+                        getCircle(getColor(l.normalized(), l.threshold()))
+                    )
                     lbl_circle.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-                    lbl_text = QLabel("%s[%s]: %0.1f%%" % (l.target, l.property, l.normalized() * 100.0))
+                    lbl_text = QLabel(
+                        "%s[%s]: %0.1f%%"
+                        % (l.target, l.property, l.normalized() * 100.0)
+                    )
                     statistic_grid.addWidget(lbl_circle, rowid, 0)
                     statistic_grid.addWidget(lbl_text, rowid, 1)
                     rowid += 1

@@ -18,22 +18,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """
 
-from PyQt5.Qsci import QsciScintilla, QsciLexerCPP
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QColor, QFont, QFontMetrics
-from PyQt5.QtWidgets import QTabWidget, QFrame
+from PyQt5.Qsci import QsciScintilla
+from PyQt5.QtWidgets import QTabWidget
 
-from datagui.package.utils import LeakFlags, getIconById, debug, default_font_size
 
 class ZoomTabView(QTabWidget):
-
     def __init__(self):
         super(ZoomTabView, self).__init__()
         self.zoomlevel = 0
         self.zoomlevel_min = -10
         self.zoomlevel_max = 30
 
-    def scaleAllTabs(self, increment = 0):
+    def scaleAllTabs(self, increment=0):
         self.zoomlevel = int(self.zoomlevel + increment)
         if self.zoomlevel < self.zoomlevel_min:
             self.zoomlevel = self.zoomlevel_min
@@ -42,7 +38,7 @@ class ZoomTabView(QTabWidget):
         self.syncTabScalingToZoomlevel()
 
     def syncTabScalingToZoomlevel(self):
-        current = self.currentIndex()
+        _ = self.currentIndex()
         for i in range(self.count() - 1):
             editor = self.widget(i)
             # SCI_SETZOOM doesn't seem to work properly for negative numbers,

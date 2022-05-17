@@ -24,7 +24,13 @@ from datastub.utils import sorted_keys
 
 from datagui.package.model.BaseTreeItem import BaseTreeItem
 from datagui.package.model.BaseTreeModel import BaseTreeModel
-from datagui.package.utils import CustomRole, CustomType, getCtxName, LeakFlags, getIconById
+from datagui.package.utils import (
+    CustomRole,
+    CustomType,
+    getCtxName,
+    LeakFlags,
+    getIconById,
+)
 
 
 class CallHierarchyItem(BaseTreeItem):
@@ -33,9 +39,9 @@ class CallHierarchyItem(BaseTreeItem):
     def __init__(self, name, obj=None, parent=None):
         super(CallHierarchyItem, self).__init__(name, obj, parent)
         self.id = CallHierarchyItem.id = CallHierarchyItem.id + 1
-        self.flag_id = LeakFlags.INFO;
+        self.flag_id = LeakFlags.INFO
         assert self.parent_item == parent
-        #self.description = name
+        # self.description = name
 
     def type(self):
         return CustomType.callHierarchyItem
@@ -44,12 +50,12 @@ class CallHierarchyItem(BaseTreeItem):
         # Note: Does not copy child_items. Is this a problem??
         new_item = CallHierarchyItem(self.name, self.obj, self.parent_item)
         new_item.id = self.id
-        assert(new_item.parent_item == self.parent_item)
+        assert new_item.parent_item == self.parent_item
         return new_item
 
-class CallHierarchyModel(BaseTreeModel):
 
-    def __init__(self, call_hierarchy = None, leakfilter = None):
+class CallHierarchyModel(BaseTreeModel):
+    def __init__(self, call_hierarchy=None, leakfilter=None):
         super(CallHierarchyModel, self).__init__()
         self.root_item = None
         self.leakfilter = leakfilter
@@ -61,12 +67,12 @@ class CallHierarchyModel(BaseTreeModel):
         call_hierarchy = item.data(CustomRole.Obj)
         filtered_cf = list()
         filtered_dl = list()
-        for l in call_hierarchy.cfleaks:
-            if self.leakfilter and self.leakfilter.isFilterActive(l.meta):
-                filtered_cf.append(l)
-        for l in call_hierarchy.dataleaks:
-            if self.leakfilter and self.leakfilter.isFilterActive(l.meta):
-                filtered_dl.append(l)
+        for cl in call_hierarchy.cfleaks:
+            if self.leakfilter and self.leakfilter.isFilterActive(cl.meta):
+                filtered_cf.append(cl)
+        for dl in call_hierarchy.dataleaks:
+            if self.leakfilter and self.leakfilter.isFilterActive(dl.meta):
+                filtered_dl.append(dl)
         return (filtered_cf, filtered_dl)
 
     # # # # # # # # # # # # #
@@ -77,7 +83,11 @@ class CallHierarchyModel(BaseTreeModel):
         if not index.isValid():
             return QVariant()
         item = index.internalPointer()
-        if role == Qt.DisplayRole or role == Qt.ToolTipRole or role == Qt.DecorationRole:
+        if (
+            role == Qt.DisplayRole
+            or role == Qt.ToolTipRole
+            or role == Qt.DecorationRole
+        ):
             filtered_cf, filtered_dl = self.getFilteredLeaks(item)
             filtered_all = list()
             filtered_all.extend(filtered_cf)
@@ -94,7 +104,9 @@ class CallHierarchyModel(BaseTreeModel):
                 elif index.column() == 3:
                     txt = ""
                     if len(filtered_all) > 0:
-                        max_leak_normalized = max( (l.status.max_leak_normalized() for l in filtered_all) )
+                        max_leak_normalized = max(
+                            (lk.status.max_leak_normalized() for lk in filtered_all)
+                        )
                         if max_leak_normalized > 0.00:
                             txt = "%0.1f%%" % (max_leak_normalized * 100)
                     return txt
@@ -103,9 +115,9 @@ class CallHierarchyModel(BaseTreeModel):
             elif role == Qt.DecorationRole:
                 if index.column() == 4:
                     max_priority = LeakFlags.NONE
-                    for l in filtered_all:
-                        if max_priority < l.meta.flag:
-                            max_priority = l.meta.flag
+                    for lk in filtered_all:
+                        if max_priority < lk.meta.flag:
+                            max_priority = lk.meta.flag
                     return getIconById(max_priority)
         elif role == CustomRole.Obj:
             item = index.internalPointer()
@@ -155,7 +167,13 @@ class CallHierarchyModel(BaseTreeModel):
             if orientation == Qt.Horizontal:
                 return ["Call Hierarchy", "D", "CF", "leakage %", ""][section]
         elif role == Qt.ToolTipRole:
-            return ["Call stack information", "Filtered data differences (phase one)", "Filtered control-flow differences (phase one)", "Filtered max. leakage (phase two/three)", "Filtered Leaks"][section]
+            return [
+                "Call stack information",
+                "Filtered data differences (phase one)",
+                "Filtered control-flow differences (phase one)",
+                "Filtered max. leakage (phase two/three)",
+                "Filtered Leaks",
+            ][section]
         return None
 
     # # # # # # # # #
@@ -169,10 +187,16 @@ class CallHierarchyModel(BaseTreeModel):
         if call_hierarchy.parent is None:
             self.root_item = CallHierarchyItem("Call Hierarchy", call_hierarchy)
             if len(call_hierarchy.children) > 0:
-                self.setupData(call_hierarchy.children[next(iter(call_hierarchy.children))], self.root_item)
+                self.setupData(
+                    call_hierarchy.children[next(iter(call_hierarchy.children))],
+                    self.root_item,
+                )
         else:
-            call_hierarchy_item = CallHierarchyItem("{}".format(getCtxName(call_hierarchy.ctxt.callee)),
-                                                    call_hierarchy, parent)
+            call_hierarchy_item = CallHierarchyItem(
+                "{}".format(getCtxName(call_hierarchy.ctxt.callee)),
+                call_hierarchy,
+                parent,
+            )
 
             parent.appendChild(call_hierarchy_item)
 

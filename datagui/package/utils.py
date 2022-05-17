@@ -24,12 +24,22 @@ import traceback
 import datetime
 from pkg_resources import resource_filename
 from PyQt5.QtCore import Qt, QSize, QRect
-from PyQt5.QtGui import QStandardItem, QPixmap, QColor, QPainter, QBrush, QIcon, QFontDatabase, QFont, QFontMetrics
-from PyQt5.QtWidgets import QPushButton, QWidget, QStyle, QLabel
+from PyQt5.QtGui import (
+    QStandardItem,
+    QPixmap,
+    QColor,
+    QPainter,
+    QBrush,
+    QIcon,
+    QFontDatabase,
+    QFont,
+    QFontMetrics,
+)
+from PyQt5.QtWidgets import QPushButton
 from datastub.DataFS import DataFS
 from datastub.SymbolInfo import SymbolInfo
 from datastub.export import MyUnpickler
-from datastub.leaks import DataLeak, CFLeak, Leak
+from datastub.leaks import DataLeak, CFLeak
 
 datafs = None
 
@@ -44,17 +54,20 @@ debug_level = 0
 
 default_font_size = 12
 
+
 def loadipinfo(pfile):
-    unp = MyUnpickler(pfile, encoding='latin1')
+    unp = MyUnpickler(pfile, encoding="latin1")
     return unp.load()
 
+
 class StackInfo:
-    """Class to store information to reset views to previously selected leak. """
+    """Class to store information to reset views to previously selected leak."""
 
     def __init__(self, coming_from_call_view, leak_ip, leak_idx):
         self.coming_from_call_view = coming_from_call_view
         self.leak_ip = leak_ip
-        self.leak_idx = leak_idx # is only valid if coming_from_call_view is True
+        self.leak_idx = leak_idx  # is only valid if coming_from_call_view is True
+
 
 def appendStackInfo(stack_info):
     global stack_index
@@ -76,6 +89,7 @@ def getCurrentStackInfo():
         debug(1, "[getCurrentStackInfo] Empty leak_stack: return None")
         return None
 
+
 def getPrevStackInfo():
     global stack_index
     if stack_index > 0:
@@ -85,6 +99,7 @@ def getPrevStackInfo():
         debug(1, "[getPrevStackInfo] Empty leak_stack: return None")
         return None
 
+
 def getNextStackInfo():
     global stack_index
     if stack_index < len(leak_stack) - 1:
@@ -93,6 +108,7 @@ def getNextStackInfo():
     else:
         debug(1, "[getNextStackInfo] stack_index to high: return None")
         return None
+
 
 def debuglevel(level):
     global debug_level
@@ -120,6 +136,7 @@ class ErrorCode:
     INVALID_COMB_OF_FILES = -5
     ASSERT = -6
 
+
 def createKey(tab_index, line_nr):
     """Return dictionary key: 'tab_index:line_nr'"""
 
@@ -146,8 +163,16 @@ class CustomType:
 class IpInfo:
     """Class to store information about global instruction pointers (ip)."""
 
-    def __init__(self, asm_tab_index, asm_line_nr, asm_marker_handle, src_tab_index, src_line_nr, src_marker_handle,
-                 lib_tree_item):
+    def __init__(
+        self,
+        asm_tab_index,
+        asm_line_nr,
+        asm_marker_handle,
+        src_tab_index,
+        src_line_nr,
+        src_marker_handle,
+        lib_tree_item,
+    ):
         self.asm_tab_index = asm_tab_index
         self.asm_line_nr = asm_line_nr
         self.asm_marker_handle = asm_marker_handle
@@ -159,16 +184,18 @@ class IpInfo:
         self.meta = LeakMetaInfo()
 
     def __str__(self):
-        strings = ["IpInfo:",
-                   "\tasm_tab_index:\t\t{}".format(self.asm_tab_index),
-                   "\tasm_line_nr:\t\t{}".format(self.asm_line_nr),
-                   "\tasm_marker_handle:\t{}".format(self.asm_marker_handle),
-                   "\tsrc_tab_index:\t\t{}".format(self.src_tab_index),
-                   "\tsrc_line_nr:\t\t{}".format(self.src_line_nr),
-                   "\tsrc_marker_handle:\t{}".format(self.src_marker_handle),
-                   "\tlib_tree_item:\t\t{}".format(self.lib_tree_item),
-                   "\tcall_tree_items:\t{}".format(self.call_tree_items),
-                   "\tmeta:\t{}".format(self.meta)]
+        strings = [
+            "IpInfo:",
+            "\tasm_tab_index:\t\t{}".format(self.asm_tab_index),
+            "\tasm_line_nr:\t\t{}".format(self.asm_line_nr),
+            "\tasm_marker_handle:\t{}".format(self.asm_marker_handle),
+            "\tsrc_tab_index:\t\t{}".format(self.src_tab_index),
+            "\tsrc_line_nr:\t\t{}".format(self.src_line_nr),
+            "\tsrc_marker_handle:\t{}".format(self.src_marker_handle),
+            "\tlib_tree_item:\t\t{}".format(self.lib_tree_item),
+            "\tcall_tree_items:\t{}".format(self.call_tree_items),
+            "\tmeta:\t{}".format(self.meta),
+        ]
 
         return "\n".join(strings)
 
@@ -195,6 +222,7 @@ def getLocalIp(ip):
                 return ip - sym.img.lower
     return ip
 
+
 def leakToStr(leak):
     if isinstance(leak, DataLeak):
         leak_type = "DataLeak"
@@ -208,10 +236,8 @@ def leakToStr(leak):
         normalized = leak.status.max_leak_normalized()
         if normalized >= 0.005:
             leak_detail_short = " (%0.1f%%)" % (normalized * 100)
-    return "{}: {}{}".format(
-        leak_type,
-        hex(getLocalIp(leak.ip)),
-        leak_detail_short)
+    return "{}: {}{}".format(leak_type, hex(getLocalIp(leak.ip)), leak_detail_short)
+
 
 def getCtxName(ip):
     """Find context name of ip.
@@ -247,6 +273,7 @@ class LeakFlags:
     RIGHT_ARROW = 4
     LEFT_ARROW = 5
 
+
 class LeakMetaInfo:
     def __init__(self):
         self.flag = LeakFlags.INVESTIGATE
@@ -262,43 +289,47 @@ class LeakMetaInfo:
 
         return string
 
+
 def getResourcePath(*args):
-    path = os.path.join(os.path.sep, '..', 'resources', *args)
+    path = os.path.join(os.path.sep, "..", "resources", *args)
     return resource_filename(__package__, path)
+
 
 def getIconUnicodeById(flag_id):
     icons = {
-        LeakFlags.NONE:        '',
-        LeakFlags.FILTER:      u'\uf0b0', # filter
-        LeakFlags.INFO:        u'\uf129', # info
-        LeakFlags.NOLEAK:      u'\uf058', # check-circle
-        LeakFlags.INVESTIGATE: u'\uf059', # question-circle
-        LeakFlags.LEAK:        u'\uf043', # tint
-        LeakFlags.DONTCARE:    u'\uf1f8', # trash
-        LeakFlags.RIGHT_ARROW: u'\uf105', # angle-right
-        LeakFlags.LEFT_ARROW:  u'\uf104', # angle-left
+        LeakFlags.NONE: "",
+        LeakFlags.FILTER: "\uf0b0",  # filter
+        LeakFlags.INFO: "\uf129",  # info
+        LeakFlags.NOLEAK: "\uf058",  # check-circle
+        LeakFlags.INVESTIGATE: "\uf059",  # question-circle
+        LeakFlags.LEAK: "\uf043",  # tint
+        LeakFlags.DONTCARE: "\uf1f8",  # trash
+        LeakFlags.RIGHT_ARROW: "\uf105",  # angle-right
+        LeakFlags.LEFT_ARROW: "\uf104",  # angle-left
     }
     if flag_id not in icons:
         flag_id = LeakFlags.INFO
     return icons[flag_id]
 
+
 def getIconColorById(flag_id):
     colors = {
-        LeakFlags.NONE:        0x000000,
-        LeakFlags.FILTER:      0x666666,
-        LeakFlags.INFO:        0x3498db,
-        LeakFlags.NOLEAK:      0x2ecc71,
-        LeakFlags.INVESTIGATE: 0xf1c40f, 
-        LeakFlags.LEAK:        0xe74c3c,
-        LeakFlags.DONTCARE:    0x666666,
+        LeakFlags.NONE: 0x000000,
+        LeakFlags.FILTER: 0x666666,
+        LeakFlags.INFO: 0x3498DB,
+        LeakFlags.NOLEAK: 0x2ECC71,
+        LeakFlags.INVESTIGATE: 0xF1C40F,
+        LeakFlags.LEAK: 0xE74C3C,
+        LeakFlags.DONTCARE: 0x666666,
         LeakFlags.RIGHT_ARROW: 0x333333,
-        LeakFlags.LEFT_ARROW:  0x333333,
+        LeakFlags.LEFT_ARROW: 0x333333,
     }
     if flag_id not in colors:
         flag_id = LeakFlags.INFO
     return colors[flag_id]
 
-def getIconById(flag_id, height = None):
+
+def getIconById(flag_id, height=None):
     if not height:
         height = getDefaultIconSize().height()
     unscaled_size = getDefaultIconSize()
@@ -310,22 +341,30 @@ def getIconById(flag_id, height = None):
     scale = height / unscaled_size.height()
     # Scaling transforms the coordinate system for subsequent draw events
     painter.scale(scale, scale)
-    painter.drawText(QRect(0, 0, unscaled_size.width(), unscaled_size.height()), Qt.AlignCenter, getIconUnicodeById(flag_id))
+    painter.drawText(
+        QRect(0, 0, unscaled_size.width(), unscaled_size.height()),
+        Qt.AlignCenter,
+        getIconUnicodeById(flag_id),
+    )
     painter.end()
     return pix
 
+
 def getLogoIcon():
     icon = QIcon()
-    icon.addFile(getResourcePath('icons', 'window_icon.png'))
+    icon.addFile(getResourcePath("icons", "window_icon.png"))
     return icon
+
 
 def getLogoIconPixmap():
     icon = QPixmap()
-    icon.load(getResourcePath('icons', 'window_icon.png'))
+    icon.load(getResourcePath("icons", "window_icon.png"))
     return icon
 
+
 def getResourceFile(*filename):
-    return open(getResourcePath(*filename), 'r')
+    return open(getResourcePath(*filename), "r")
+
 
 def getIconTooltipById(flag_id):
     """Return a tooltip for a given flag id.
@@ -349,6 +388,7 @@ def getIconTooltipById(flag_id):
     else:
         return None
 
+
 class ColorScheme:
     CALL = "CALL"
     LIB = "LIB"
@@ -369,6 +409,7 @@ def getCircle(color):
 
     return pixmap
 
+
 def getColor(value, threshold):
     # value    in [0,1]
     # threshold in [0,1]
@@ -383,42 +424,51 @@ def getColor(value, threshold):
     color.setHsl(hue, saturation, lightness, 255)
     return color
 
+
 def createIconButton(size, flag_id):
     """Create a icon button which is a QPushButton object."""
     btn = QPushButton()
     btn.setFont(QFont("Font Awesome 5 Free Solid", default_font_size))
     btn.setText(getIconUnicodeById(flag_id))
-    btn.setStyleSheet('QPushButton {color: #%06X;}' % getIconColorById(flag_id))
+    btn.setStyleSheet("QPushButton {color: #%06X;}" % getIconColorById(flag_id))
     btn.setToolTip(getIconTooltipById(flag_id))
     btn.setFixedSize(QSize(size.width() + 5, size.height() + 5))
     return btn
+
 
 def global_exception_handler(tt, value, tb):
     fe = traceback.format_exception(tt, value, tb)
     msg = "".join(fe)
     debug(0, "ASSERT: %s", msg)
     try:
-        with open('datagui.log', 'a') as f:
+        with open("datagui.log", "a") as f:
             f.write("####\\n")
             f.write(str(datetime.datetime.now()) + "\\n")
             f.write(msg)
-    except:
+    except Exception:
         debug(0, "Error writing datagui.log!")
     if assert_handler:
         assert_handler(msg)
 
+
 assert_handler = None
+
 
 def register_assert_handler(handler):
     global assert_handler
     assert_handler = handler
 
+
 sys.excepthook = global_exception_handler
 
+
 def registerFonts():
-    QFontDatabase.addApplicationFont(getResourcePath('Font Awesome 5 Free-Solid-900.otf'))
+    QFontDatabase.addApplicationFont(
+        getResourcePath("Font Awesome 5 Free-Solid-900.otf")
+    )
+
 
 def getDefaultIconSize():
-    icon_size = QFontMetrics(QFont()).size(0,"Ag").height()
+    icon_size = QFontMetrics(QFont()).size(0, "Ag").height()
     icon_size = QSize(icon_size, icon_size)
     return icon_size

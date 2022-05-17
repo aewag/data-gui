@@ -19,16 +19,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 from PyQt5.Qsci import QsciScintilla
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QColor, QFont, QFontMetrics
-from PyQt5.QtWidgets import QTabWidget, QFrame
+from PyQt5.QtGui import QColor, QFont
+from PyQt5.QtWidgets import QFrame
 
 from datagui.package.ui.ZoomTabView import ZoomTabView
 from datagui.package.utils import getIconById, LeakFlags, debug, default_font_size
 
 
 class AsmTabView(ZoomTabView):
-
     def __init__(self):
         super(AsmTabView, self).__init__()
         self.empty_tab = QFrame()
@@ -89,7 +87,11 @@ class AsmTabView(ZoomTabView):
         editor.setFocus()
 
     def marginLeftClick(self, margin_nr, line_nr, state):
-        debug(5, "[ASM] marginLeftClick\n\tmargin_nr: %d, line_nr: %d, state: %d", (margin_nr, line_nr, state))
+        debug(
+            5,
+            "[ASM] marginLeftClick\n\tmargin_nr: %d, line_nr: %d, state: %d",
+            (margin_nr, line_nr, state),
+        )
 
     def recomputeMarkers(self, editor):
         height = editor.textHeight(0)

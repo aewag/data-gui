@@ -20,6 +20,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 from PyQt5.QtCore import QAbstractItemModel, Qt, QModelIndex
 
+
 class BaseTreeModel(QAbstractItemModel):
     def __init__(self):
         self.root_item = None
