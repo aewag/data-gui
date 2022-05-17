@@ -19,15 +19,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 from PyQt5.Qsci import QsciScintilla, QsciLexerCPP
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QColor, QFont, QFontMetrics
-from PyQt5.QtWidgets import QTabWidget, QFrame
+from PyQt5.QtGui import QColor, QFont
+from PyQt5.QtWidgets import QFrame
 
 from datagui.package.ui.ZoomTabView import ZoomTabView
 from datagui.package.utils import LeakFlags, getIconById, debug, default_font_size
 
-class SourceTabView(ZoomTabView):
 
+class SourceTabView(ZoomTabView):
     def __init__(self):
         super(SourceTabView, self).__init__()
         self.empty_tab = QFrame()
@@ -84,7 +83,6 @@ class SourceTabView(ZoomTabView):
         # ------
         self.recomputeMarkers(editor)
 
-
         tab_index = self.addTab(editor, source_file.name.split("/")[-1])
         return tab_index
 
@@ -99,7 +97,11 @@ class SourceTabView(ZoomTabView):
         editor.setCursorPosition(line_nr, 0)
 
     def marginLeftClick(self, margin_nr, line_nr, state):
-        debug(5, "[SRC] marginLeftClick\n\tmargin_nr: %d, line_nr: %d, state: %d", (margin_nr, line_nr, state))
+        debug(
+            5,
+            "[SRC] marginLeftClick\n\tmargin_nr: %d, line_nr: %d, state: %d",
+            (margin_nr, line_nr, state),
+        )
 
     def recomputeMarkers(self, editor):
         height = editor.textHeight(0)
