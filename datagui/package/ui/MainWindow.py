@@ -1418,7 +1418,7 @@ class MainWindow(QMainWindow):
         if isinstance(item, CallHierarchyItem):
             markLeaks(item)
             for child_item in item.child_items:  # type: CallHierarchyItem
-                res = self.markAllRecursive(flag_id, user_comment, child_item)
+                _ = self.markAllRecursive(flag_id, user_comment, child_item)
         elif isinstance(item, LibHierarchyItem):
             if isinstance(item.obj, FunctionLeak):
                 # We cannot use leaks within FunctionLeak directly, since they are not mapped back to the CallHierarchy.
@@ -1446,7 +1446,7 @@ class MainWindow(QMainWindow):
                                 call_hierarchy.cfleaks[leak], flag_id, user_comment
                             )
             for child_item in item.child_items:  # type: LibHierarchyItem
-                res = self.markAllRecursive(flag_id, user_comment, child_item)
+                _ = self.markAllRecursive(flag_id, user_comment, child_item)
         else:
             debug(0, "[markAllRecursive] Invalid item type: %s" % type(item))
 
