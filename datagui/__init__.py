@@ -18,4 +18,4 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """
 
-DATAGUI_VERSION = '1.2'
+DATAGUI_VERSION = "1.2"

@@ -38,7 +38,6 @@ class LibHierarchyItem(BaseTreeItem):
 
 
 class LibHierarchyModel(BaseTreeModel):
-
     def __init__(self, lib_hierarchy=None):
         super(LibHierarchyModel, self).__init__()
         self.root_item = None
@@ -95,7 +94,6 @@ class LibHierarchyModel(BaseTreeModel):
             parent_item = parent.internalPointer()
 
         return len(parent_item.child_items)
-
 
     def columnCount(self, parent):
         return 1

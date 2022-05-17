@@ -49,8 +49,8 @@ class CallListItem(QStandardItem):
     def parent(self):
         return self.parent_item
 
-class CallListModel(BaseTreeModel):
 
+class CallListModel(BaseTreeModel):
     def __init__(self):
         super(CallListModel, self).__init__()
         self.name = ""
@@ -84,10 +84,10 @@ class CallListModel(BaseTreeModel):
             return index.internalPointer()
         elif role == Qt.DecorationRole:
             if index.column() == 0:
-              if item.leak:
-                  return utils.getIconById(item.getFlag())
-              else:
-                  return utils.getIconById(LeakFlags.INFO)
+                if item.leak:
+                    return utils.getIconById(item.getFlag())
+                else:
+                    return utils.getIconById(LeakFlags.INFO)
         return QVariant()
 
     def index(self, row, column, parent):
@@ -132,7 +132,7 @@ class CallListModel(BaseTreeModel):
             function_name = rec_iterator.name.split(" ")[-1].split("(")[0]
             function_names.insert(0, function_name)
             rec_iterator = rec_iterator.parent_item
-        return '/'.join(function_names)
+        return "/".join(function_names)
 
     def appendItem(self, call_item, leak):
         # Generate long path-prefixed name

@@ -28,7 +28,6 @@ from datagui.package.utils import getIconById, LeakFlags, debug, default_font_si
 
 
 class AsmTabView(ZoomTabView):
-
     def __init__(self):
         super(AsmTabView, self).__init__()
         self.empty_tab = QFrame()
@@ -89,7 +88,11 @@ class AsmTabView(ZoomTabView):
         editor.setFocus()
 
     def marginLeftClick(self, margin_nr, line_nr, state):
-        debug(5, "[ASM] marginLeftClick\n\tmargin_nr: %d, line_nr: %d, state: %d", (margin_nr, line_nr, state))
+        debug(
+            5,
+            "[ASM] marginLeftClick\n\tmargin_nr: %d, line_nr: %d, state: %d",
+            (margin_nr, line_nr, state),
+        )
 
     def recomputeMarkers(self, editor):
         height = editor.textHeight(0)

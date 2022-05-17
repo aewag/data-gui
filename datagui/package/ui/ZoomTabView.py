@@ -25,15 +25,15 @@ from PyQt5.QtWidgets import QTabWidget, QFrame
 
 from datagui.package.utils import LeakFlags, getIconById, debug, default_font_size
 
-class ZoomTabView(QTabWidget):
 
+class ZoomTabView(QTabWidget):
     def __init__(self):
         super(ZoomTabView, self).__init__()
         self.zoomlevel = 0
         self.zoomlevel_min = -10
         self.zoomlevel_max = 30
 
-    def scaleAllTabs(self, increment = 0):
+    def scaleAllTabs(self, increment=0):
         self.zoomlevel = int(self.zoomlevel + increment)
         if self.zoomlevel < self.zoomlevel_min:
             self.zoomlevel = self.zoomlevel_min
