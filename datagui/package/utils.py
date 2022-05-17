@@ -445,7 +445,7 @@ def global_exception_handler(tt, value, tb):
             f.write("####\\n")
             f.write(str(datetime.datetime.now()) + "\\n")
             f.write(msg)
-    except:
+    except Exception:
         debug(0, "Error writing datagui.log!")
     if assert_handler:
         assert_handler(msg)
