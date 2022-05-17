@@ -150,7 +150,7 @@ class MainWindow(QMainWindow):
             except FileNotFoundError:
                 debug(0, "Please enter a valid zip file path (mandatory)")
                 sys.exit(ErrorCode.INVALID_ZIP)
-            except:
+            except Exception:
                 debug(0, "Unable to load zip file")
                 sys.exit(ErrorCode.CANNOT_LOAD_ZIP)
         else:
