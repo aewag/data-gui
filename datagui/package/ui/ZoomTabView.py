@@ -38,7 +38,7 @@ class ZoomTabView(QTabWidget):
         self.syncTabScalingToZoomlevel()
 
     def syncTabScalingToZoomlevel(self):
-        current = self.currentIndex()
+        _ = self.currentIndex()
         for i in range(self.count() - 1):
             editor = self.widget(i)
             # SCI_SETZOOM doesn't seem to work properly for negative numbers,
