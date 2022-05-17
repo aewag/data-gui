@@ -67,12 +67,12 @@ class CallHierarchyModel(BaseTreeModel):
         call_hierarchy = item.data(CustomRole.Obj)
         filtered_cf = list()
         filtered_dl = list()
-        for l in call_hierarchy.cfleaks:
-            if self.leakfilter and self.leakfilter.isFilterActive(l.meta):
-                filtered_cf.append(l)
-        for l in call_hierarchy.dataleaks:
-            if self.leakfilter and self.leakfilter.isFilterActive(l.meta):
-                filtered_dl.append(l)
+        for cl in call_hierarchy.cfleaks:
+            if self.leakfilter and self.leakfilter.isFilterActive(cl.meta):
+                filtered_cf.append(cl)
+        for dl in call_hierarchy.dataleaks:
+            if self.leakfilter and self.leakfilter.isFilterActive(dl.meta):
+                filtered_dl.append(dl)
         return (filtered_cf, filtered_dl)
 
     # # # # # # # # # # # # #
@@ -105,7 +105,7 @@ class CallHierarchyModel(BaseTreeModel):
                     txt = ""
                     if len(filtered_all) > 0:
                         max_leak_normalized = max(
-                            (l.status.max_leak_normalized() for l in filtered_all)
+                            (lk.status.max_leak_normalized() for lk in filtered_all)
                         )
                         if max_leak_normalized > 0.00:
                             txt = "%0.1f%%" % (max_leak_normalized * 100)
@@ -115,9 +115,9 @@ class CallHierarchyModel(BaseTreeModel):
             elif role == Qt.DecorationRole:
                 if index.column() == 4:
                     max_priority = LeakFlags.NONE
-                    for l in filtered_all:
-                        if max_priority < l.meta.flag:
-                            max_priority = l.meta.flag
+                    for lk in filtered_all:
+                        if max_priority < lk.meta.flag:
+                            max_priority = lk.meta.flag
                     return getIconById(max_priority)
         elif role == CustomRole.Obj:
             item = index.internalPointer()
