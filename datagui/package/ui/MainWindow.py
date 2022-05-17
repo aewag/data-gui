@@ -23,8 +23,8 @@ import datetime
 import fs
 
 from PyQt5.Qsci import QsciScintilla
-from PyQt5.QtCore import Qt, QVariant, QModelIndex, QItemSelectionModel, QSize
-from PyQt5.QtGui import QBrush, QColor, QIcon, QPalette, QFont
+from PyQt5.QtCore import Qt, QVariant, QModelIndex, QItemSelectionModel
+from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.QtWidgets import (
     QMainWindow,
     QFrame,
@@ -80,11 +80,9 @@ from datagui.package.utils import (
     LeakFlags,
     debug,
     getCtxName,
-    default_font_size,
     createIconButton,
     register_assert_handler,
     loadipinfo,
-    leakToStr,
     getLogoIcon,
     getLogoIconPixmap,
     getResourceFile,
@@ -92,8 +90,6 @@ from datagui.package.utils import (
     getDefaultIconSize,
     getIconById,
     getIconTooltipById,
-    getIconUnicodeById,
-    getIconColorById,
 )
 
 mainWindow = None

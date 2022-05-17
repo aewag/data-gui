@@ -18,12 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """
 
-from PyQt5.Qsci import QsciScintilla, QsciLexerCPP
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QColor, QFont, QFontMetrics
-from PyQt5.QtWidgets import QTabWidget, QFrame
-
-from datagui.package.utils import LeakFlags, getIconById, debug, default_font_size
+from PyQt5.Qsci import QsciScintilla
+from PyQt5.QtWidgets import QTabWidget
 
 
 class ZoomTabView(QTabWidget):

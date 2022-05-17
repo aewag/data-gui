@@ -19,9 +19,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 from PyQt5.Qsci import QsciScintilla
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QColor, QFont, QFontMetrics
-from PyQt5.QtWidgets import QTabWidget, QFrame
+from PyQt5.QtGui import QColor, QFont
+from PyQt5.QtWidgets import QFrame
 
 from datagui.package.ui.ZoomTabView import ZoomTabView
 from datagui.package.utils import getIconById, LeakFlags, debug, default_font_size

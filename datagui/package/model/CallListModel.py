@@ -18,15 +18,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """
 
-import copy
-
 from PyQt5.QtCore import QModelIndex, QVariant, Qt
 from PyQt5.QtGui import QStandardItem
 
 from datagui.package import utils
 from datagui.package.model.BaseTreeModel import BaseTreeModel
 from datagui.package.model.CallHierarchyModel import CallHierarchyItem
-from datagui.package.utils import CustomRole, CustomType, LeakFlags, getIconById
+from datagui.package.utils import CustomRole, CustomType, LeakFlags
 
 
 class CallListItem(QStandardItem):

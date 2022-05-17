@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 from PyQt5.QtCore import QSize
-from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QWidget,
     QSizePolicy,
@@ -30,8 +29,8 @@ from PyQt5.QtWidgets import (
     QTextEdit,
     QLabel,
 )
-from PyQt5.QtGui import QColor, QFont, QFontMetrics
-from datastub.leaks import Leak, NSLeak, NSPType, SPLeak
+from PyQt5.QtGui import QFontMetrics
+from datastub.leaks import Leak
 from datagui.package.utils import (
     getCircle,
     getColor,
@@ -54,8 +53,6 @@ flag_to_btn = {
     LeakFlags.LEAK: 2,
     LeakFlags.DONTCARE: 3,
 }
-
-import pdb
 
 
 class SummaryTab(QWidget):

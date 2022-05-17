@@ -19,7 +19,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
 from PyQt5.QtCore import QModelIndex, QVariant, Qt
-from datastub.leaks import FunctionLeak
 
 from datagui.package.model.BaseTreeItem import BaseTreeItem
 from datagui.package.model.BaseTreeModel import BaseTreeModel

@@ -35,11 +35,11 @@ from PyQt5.QtGui import (
     QFont,
     QFontMetrics,
 )
-from PyQt5.QtWidgets import QPushButton, QWidget, QStyle, QLabel
+from PyQt5.QtWidgets import QPushButton
 from datastub.DataFS import DataFS
 from datastub.SymbolInfo import SymbolInfo
 from datastub.export import MyUnpickler
-from datastub.leaks import DataLeak, CFLeak, Leak
+from datastub.leaks import DataLeak, CFLeak
 
 datafs = None
 
