@@ -49,6 +49,7 @@ setuptools.setup(
         "datastub",
     ],
     install_requires=[
+        "argparse",
         "qscintilla>=2.10.3, <3",
         "qtconsole>=4.3.1",
         "pgzero>=1.2",

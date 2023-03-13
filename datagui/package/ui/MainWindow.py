@@ -114,9 +114,9 @@ class LeakFilter:
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, pickle_path, zip_path):
         super(MainWindow, self).__init__()
-        self.pickle_path = ""
+        self.pickle_path = pickle_path
         self.dialog_path = "."
         self.unsaved_changes = False
         self.call_hierarchy = None  # Only for assert_handler
@@ -128,8 +128,9 @@ class MainWindow(QMainWindow):
         register_assert_handler(assert_handler)
         registerFonts()
 
-        if len(sys.argv) == 3:
-            self.pickle_path = sys.argv[1]
+        if not pickle_path or not zip_path:
+            self.call_hierarchy = self.openFiles()
+        else:
             self.dialog_path = os.path.dirname(os.path.abspath(self.pickle_path))
             try:
                 self.call_hierarchy = loadpickle(self.pickle_path)
@@ -144,15 +145,13 @@ class MainWindow(QMainWindow):
                 sys.exit(ErrorCode.CANNOT_LOAD_PICKLE)
 
             try:
-                utils.setupSymbolInfo(sys.argv[2])
+                utils.setupSymbolInfo(zip_path)
             except FileNotFoundError:
                 debug(0, "Please enter a valid zip file path (mandatory)")
                 sys.exit(ErrorCode.INVALID_ZIP)
             except Exception:
                 debug(0, "Unable to load zip file")
                 sys.exit(ErrorCode.CANNOT_LOAD_ZIP)
-        else:
-            self.call_hierarchy = self.openFiles()
 
         if self.call_hierarchy is None:
             debug(0, "Error opening pickle/zip file")

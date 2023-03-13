@@ -18,14 +18,28 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """
 
+import argparse
 import sys
 from PyQt5.QtWidgets import QApplication
 from datagui.package.ui.MainWindow import MainWindow
 
 
+parser = argparse.ArgumentParser(prog="DATAgui", description="GUI for the DATA results")
+parser.add_argument(
+    "pickle_path",
+    default="",
+    type=str,
+    help="Default DATA naming: result_phaseX.pickle",
+)
+parser.add_argument(
+    "zip_path", default="", type=str, help="Default DATA naming: framework.zip"
+)
+args = parser.parse_args()
+
+
 def main():
     app = QApplication(sys.argv)
-    MainWindow()
+    MainWindow(args.pickle_path, args.zip_path)
     sys.exit(app.exec_())
 
 
